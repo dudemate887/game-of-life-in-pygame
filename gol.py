@@ -2,6 +2,28 @@ import math
 import numpy as np
 import pygame
 
+def countNeighbors(x, y, coord, rectSize):
+    nAliveAround = 0
+    if x - rectSize == coord[0] and y == coord[1]:  #Left
+        nAliveAround += 1
+    if x + rectSize == coord[0] and y == coord[1]:  #Right
+        nAliveAround += 1
+    if x - rectSize == coord[0] and y - rectSize == coord[1]: #Top left
+        nAliveAround += 1
+    if x == coord[0] and y - rectSize == coord[1]: #Top
+        nAliveAround += 1
+    if x + rectSize == coord[0] and y - rectSize == coord[1]: #Top right
+        nAliveAround += 1
+    if x - rectSize == coord[0] and y + rectSize == coord[1]: #Bottom left
+        nAliveAround += 1
+    if x == coord[0] and y + rectSize == coord[1]: #Bottom
+        nAliveAround += 1
+    if x + rectSize == coord[0] and y + rectSize == coord[1]: #Bottom right
+        nAliveAround += 1
+    print(nAliveAround, x, y)
+    return nAliveAround
+
+
 # pygame setup
 pygame.init()
 screenSize = (1280, 720)
@@ -36,39 +58,14 @@ while running:
                 playSim = True
 
     if playSim == True:
-        for x in np.arange(0, screenSize[0], rectSize):
-            for y in np.arange(0, screenSize[1], rectSize):
+        for y in np.arange(0, 100, rectSize):
+            for x in np.arange(0, 100, rectSize):
                 for coord in rectCoords:
-                    nAliveAround = 0
-                    if x - rectSize == coord[0] and y == coord[1]:  #Left
-                        nAliveAround += 1
-                        print(f"{x} - {rectSize} is {coord[0]}")
-                    if x + rectSize == coord[0] and y == coord[1]:  #Right
-                        nAliveAround += 1
-                        print("foun2d")
-                    if x - rectSize == coord[0] and y - rectSize == coord[1]: #Top left
-                        nAliveAround += 1
-                        print("fou3nd")
-                    if x == coord[0] and y - rectSize == coord[1]: #Top
-                        nAliveAround += 1
-                        print("f4ound")
-                    if x + rectSize == coord[0] and y - rectSize == coord[1]: #Top right
-                        nAliveAround += 1
-                        print("fou5nd")
-                    if x - rectSize == coord[0] and y + rectSize == coord[1]: #Bottom left
-                        nAliveAround += 1
-                        print("fou6nd")
-                    if x == coord[0] and y + rectSize == coord[1]: #Bottom
-                        nAliveAround += 1
-                        print("fou7nd")
-                    if x + rectSize == coord[0] and y + rectSize == coord[1]: #Bottom right
-                        nAliveAround += 1
-                        print("fou8nd")
-
+                    nAliveAround = countNeighbors(x, y, coord, rectSize)
                     if x == coord[0] and y == coord[1]: #Check if it's already a cell
                         if nAliveAround < 2: #Dies from underpopulation
                             rectCoords.remove(coord)
-                            print(f"{coord} dies from under from check from block {x, y}")
+                            print(f"{coord} dies from under ({nAliveAround}) from check from block {x, y}")
                         if nAliveAround == 2 or nAliveAround == 3: #Lives
                             pass
                             print("survives")
