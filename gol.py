@@ -20,13 +20,13 @@ def countNeighbors(x, y, coord, rectSize):
         nAliveAround += 1
     if x + rectSize == coord[0] and y + rectSize == coord[1]: #Bottom right
         nAliveAround += 1
-    print(nAliveAround, x, y)
-    return nAliveAround
+    
+    return int(nAliveAround)
 
 
 # pygame setup
 pygame.init()
-screenSize = (1280, 720)
+screenSize = (1920, 1080)
 screen = pygame.display.set_mode(screenSize)
 clock = pygame.time.Clock()
 running = True
@@ -54,27 +54,38 @@ while running:
                     rectCoords.pop()
 
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
             if event.key == pygame.K_SPACE:
                 playSim = True
 
     if playSim == True:
-        for y in np.arange(0, 100, rectSize):
-            for x in np.arange(0, 100, rectSize):
+        for y in np.arange(0, screenSize[1], rectSize):
+            for x in np.arange(0, screenSize[0], rectSize):
+                isAlive = False
                 for coord in rectCoords:
-                    nAliveAround = countNeighbors(x, y, coord, rectSize)
-                    if x == coord[0] and y == coord[1]: #Check if it's already a cell
-                        if nAliveAround < 2: #Dies from underpopulation
-                            rectCoords.remove(coord)
-                            print(f"{coord} dies from under ({nAliveAround}) from check from block {x, y}")
-                        if nAliveAround == 2 or nAliveAround == 3: #Lives
-                            pass
-                            print("survives")
-                        if nAliveAround > 3: #Dies from overpopulation
-                            rectCoords.remove(coord)
-                            print("dies from over")
-                    elif nAliveAround == 3: #Repopulates
+                    if x == coord[0] and y == coord[1]:
+                        isAlive = True
+                if isAlive == True:
+                    totalAround = 0
+                    for coord in rectCoords:
+                        totalAround += countNeighbors(x, y, coord, rectSize)
+                    if totalAround < 2 or totalAround > 3:
+                        rectCoords.remove((x, y))
+
+
+                if isAlive == False:
+                    totalAround = 0
+                    for coord in rectCoords:
+                        totalAround += countNeighbors(x, y, coord, rectSize)
+                    if totalAround == 3:
                         rectCoords.append((x, y))
-                        print("born")
+                        isAlive = True
+                
+                
+
+                    
+
                     
 
 
