@@ -31,6 +31,10 @@ screen = pygame.display.set_mode(screenSize)
 clock = pygame.time.Clock()
 running = True
 playSim = False
+generation = 0
+
+#Font stuff
+genCountFont = pygame.font.SysFont('Arial', 30)
 
 rectCoords = []
 rectSize = 20
@@ -89,24 +93,20 @@ while running:
         for cell in cellsToBorn:
             rectCoords.append(cell)
                 
-                
-
-                    
-
-                    
-
-
+    
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
     for i in rectCoords:
         pygame.draw.rect(screen, "white", pygame.Rect(i, (rectSize, rectSize)))
 
-
+    genCount = genCountFont.render("Generation " + str(generation), False, (255, 255, 255))
+    screen.blit(genCount, (0,0))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
     if playSim:
+        generation += 1
         clock.tick(3)
     else:
         clock.tick(60)
