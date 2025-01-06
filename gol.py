@@ -60,6 +60,8 @@ while running:
                 playSim = True
 
     if playSim == True:
+        cellsToKill = []
+        cellsToBorn = []
         for y in np.arange(0, screenSize[1], rectSize):
             for x in np.arange(0, screenSize[0], rectSize):
                 isAlive = False
@@ -71,7 +73,7 @@ while running:
                     for coord in rectCoords:
                         totalAround += countNeighbors(x, y, coord, rectSize)
                     if totalAround < 2 or totalAround > 3:
-                        rectCoords.remove((x, y))
+                        cellsToKill.append((x, y))
 
 
                 if isAlive == False:
@@ -79,8 +81,13 @@ while running:
                     for coord in rectCoords:
                         totalAround += countNeighbors(x, y, coord, rectSize)
                     if totalAround == 3:
-                        rectCoords.append((x, y))
+                        cellsToBorn.append((x, y))
                         isAlive = True
+
+        for cell in cellsToKill:
+            rectCoords.remove(cell)
+        for cell in cellsToBorn:
+            rectCoords.append(cell)
                 
                 
 
@@ -99,6 +106,9 @@ while running:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
-    clock.tick(10)
+    if playSim:
+        clock.tick(3)
+    else:
+        clock.tick(60)
 
 pygame.quit()
