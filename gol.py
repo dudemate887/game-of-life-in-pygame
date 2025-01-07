@@ -5,7 +5,7 @@ import pygame
 # pygame setup
 pygame.init()
 screenSize = (1920, 1080)
-screen = pygame.display.set_mode(screenSize)
+screen = pygame.display.set_mode(screenSize, display=1)
 clock = pygame.time.Clock()
 running = True
 playSim = False
@@ -19,6 +19,36 @@ class Cell:
         self.x = x
         self.y = y
         self.isAlive = False
+
+    def countNeighbors(self, tiles, x, y, tileSize):
+        aliveNeighbors = 0
+        neighbors = []
+
+        for tile in tiles:
+            if x - tileSize == tile.x and y == tile.y:
+                neighbors.append(tile)
+            if x + tileSize == tile.x and y == tile.y:
+                neighbors.append(tile)
+            if x - tileSize == tile.x and y - tileSize == tile.y:
+                neighbors.append(tile)
+            if x == tile.x and y - tileSize == tile.y:
+                neighbors.append(tile)
+            if x + tileSize == tile.x and y - tileSize == tile.y:
+                neighbors.append(tile)
+            if x - tileSize == tile.x and y + tileSize == tile.y:
+                neighbors.append(tile)
+            if x == tile.x and y + tileSize == tile.y:
+                neighbors.append(tile)
+            if x + tileSize == tile.x and y + tileSize == tile.y:
+                neighbors.append(tile)
+
+        for i in neighbors:
+            if i.isAlive == True:
+                aliveNeighbors += 1
+
+        return (aliveNeighbors)
+
+
     
 
 
@@ -56,13 +86,27 @@ while running:
             if event.key == pygame.K_SPACE:
                 playSim = True
 
-    
-    to_make = []
     to_kill = []
 
     if playSim == True:
-        pass
-                
+        for tile in tiles:
+            aliveNeighbors = tile.countNeighbors(tiles, tile.x, tile.y, tileSize)
+            print(f"{tile.x}, {tile.y} has found {aliveNeighbors} tiles")
+            if tile.isAlive == True:
+                if aliveNeighbors < 2 or aliveNeighbors > 3:
+                    to_kill.append(tile)
+            else: 
+                if aliveNeighbors == 3:
+                    to_kill.append(tile)
+            
+    for tileToMake in to_kill:
+        for tile in tiles:
+            if tileToMake == tile:
+                if tile.isAlive == False:
+                    tile.isAlive = True
+                else:
+                    tile.isAlive = False
+
     
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
