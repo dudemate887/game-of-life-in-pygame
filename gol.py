@@ -45,7 +45,10 @@ while running:
             newSnappedCoordY = math.floor(newCoordY / tileSize) * tileSize
             for tile in tiles:
                 if tile.x == newSnappedCoordX and tile.y == newSnappedCoordY:
-                    tile.isAlive = True
+                    if tile.isAlive == False:
+                        tile.isAlive = True
+                    else:
+                        tile.isAlive = False
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
