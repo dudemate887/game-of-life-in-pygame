@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import pygame
+import random
 
 def countNeighbors(x, y, coord, rectSize):
     nAliveAround = 0
@@ -62,6 +63,16 @@ while running:
                 running = False
             if event.key == pygame.K_SPACE:
                 playSim = True
+
+    for i in range(0, 100):
+        coordX = random.uniform(0, screenSize[0] - rectSize)
+        coordY = random.uniform(0, screenSize[1] - rectSize)
+        SnappedCoordX = math.floor(coordX / rectSize) * rectSize
+        SnappedCoordY = math.floor(coordY / rectSize) * rectSize
+        rectCoords.append((SnappedCoordX, SnappedCoordY))
+
+    rectCoords = list(set(rectCoords))
+
 
     if playSim == True:
         cellsToKill = []
