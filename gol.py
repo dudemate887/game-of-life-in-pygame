@@ -37,7 +37,7 @@ generation = 0
 genCountFont = pygame.font.SysFont('Arial', 30)
 
 rectCoords = []
-rectSize = 20
+rectSize = 10
 
 while running:
     # poll for events
